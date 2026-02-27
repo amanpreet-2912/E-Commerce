@@ -14,7 +14,7 @@ export function SellerTable() {
     getMyProducts();
     
   }, []);
-  console.log(products)
+ 
   const handleView = (id) => {
     navigate(`/seller/products/${id}`);
   };
@@ -66,8 +66,7 @@ export function SellerTable() {
   ];
 
   return (
-    <div className="min-h-screen p-6">
-      <div className="bg-background rounded-2xl shadow-lg border border-border p-6 space-y-6">
+      <div className="bg-background rounded-2xl shadow-lg border-border p-6 space-y-6">
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-primary">My Products</h1>
@@ -93,6 +92,5 @@ export function SellerTable() {
           />
         </div>
       </div>
-    </div>
   );
 }

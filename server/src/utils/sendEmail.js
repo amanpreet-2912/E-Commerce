@@ -1,5 +1,4 @@
-import nodemailer from "nodemailer"
-console.log(process.env.PORT);
+import nodemailer from "nodemailer";
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -7,12 +6,24 @@ const transporter = nodemailer.createTransport({
     pass: "zelqshcaehnieanc",
   },
 });
-export async function sendOtpEmail(to, otp) {
-  await transporter.sendMail({
-    from: "E-commerce App" ,
-    to,
-    subject: "Email Verification OTP",
-    html: `<h2>Your Otp is : ${otp}</h2>`,
-  });
-}
+export async function sendEmail({
+  to,
+  subject,
+  html,
+  text,
+  from = "E-commerce App <no-reply@ecommerce.com>",
+}) {
+  try {
+    const info = await transporter.sendMail({
+      from,
+      to,
+      subject,
+      html,
+      text,
+    });
 
+  } catch (error) {
+    console.error("Email error:", error);
+    throw error;
+  }
+}

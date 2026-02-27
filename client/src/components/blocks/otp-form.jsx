@@ -36,7 +36,6 @@ export function OTPForm({ className, ...props }) {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setError,
     control,
   } = form;
   async function onSubmit(data) {
@@ -48,7 +47,6 @@ export function OTPForm({ className, ...props }) {
       clearEmail();
       navigate("/");
     } catch (err) {
-      console.log(err);
       toast.error("Something went wrong")
     }
   }
@@ -58,7 +56,7 @@ export function OTPForm({ className, ...props }) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <FieldGroup>
           <div className="flex flex-col items-center gap-1 text-center">
-            <h1 className="text-2xl font-bold">Enter verification code</h1>
+            <h1 className="text-2xl font-bold text-primary ">Enter verification code</h1>
             <p className="text-muted-foreground text-sm text-balance">
               We sent a 6-digit code to your email.
             </p>
@@ -101,7 +99,7 @@ export function OTPForm({ className, ...props }) {
               Enter the 6-digit code sent to your email.
             </FieldDescription>
           </Field>
-          <Button className={"text-background"} type="submit" disabled={isSubmitting}>
+          <Button className={"text-background bg-accent hover:bg-accent-foreground"} type="submit" disabled={isSubmitting}>
             {isSubmitting || loading ? "Verifying" : "Verify"}
           </Button>
           {/* <FieldDescription className="text-center">

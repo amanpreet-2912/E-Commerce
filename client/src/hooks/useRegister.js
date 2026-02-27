@@ -5,6 +5,7 @@ import {
   verifyOtp,
   resetPassword,
   forgotPassword,
+  logoutUser,
 } from "@/services/registerService";
 export function useRegister() {
   const [loading, setLoading] = useState(false);
@@ -52,5 +53,13 @@ export function useRegister() {
       setLoading(false);
     }
   };
-  return { signup, verify, login, loading, forgot, reset };
+  const logout = async () => {
+    setLoading(true);
+    try {
+      await logoutUser();
+    } finally {
+      setLoading(false);
+    }
+  };
+  return { signup, verify, login, loading, forgot, reset ,logout};
 }

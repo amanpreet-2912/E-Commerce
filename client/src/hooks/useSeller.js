@@ -5,10 +5,14 @@ import {
   deleteProduct,
   viewMyProduct,
   updateProduct,
+  getCategories,
+  getSellerDashboard,
+  getSellerOrders,
 } from "@/services/sellerServices";
 export function useSeller() {
   const [loading, setLoading] = useState();
   const [products, setProducts] = useState([]);
+  const [stats, setStats] = useState(null);
   const getMyProducts = async () => {
     setLoading(true);
     try {
@@ -43,15 +47,46 @@ export function useSeller() {
     setLoading(true);
     try {
       const data = await viewMyProduct(productId);
-      
+
       return data;
     } finally {
       setLoading(false);
     }
   };
   const updateMyProduct = async (productId, data) => {
+    setLoading(true);
+
     try {
       await updateProduct(productId, data);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const getcategories = async () => {
+    setLoading(true);
+    try {
+      const data = await getCategories();
+      return data.categories;
+    } finally {
+      setLoading(false);
+    }
+  };
+  const fetchStats = async () => {
+    setLoading(true);
+    try {
+      const data = await getSellerDashboard();
+      return data;
+    } finally {
+      setLoading(false);
+    }
+  };
+  const fetchSellerOrders = async () => {
+    setLoading(true);
+    try {
+      const data = await getSellerOrders();
+      console.log(data)
+      return data.orders;
+    
     } finally {
       setLoading(false);
     }
@@ -63,6 +98,10 @@ export function useSeller() {
     createNewProduct,
     getMyProducts,
     viewProduct,
-    updateMyProduct
+    updateMyProduct,
+    getcategories,
+    fetchStats,
+    stats,
+    fetchSellerOrders,
   };
 }

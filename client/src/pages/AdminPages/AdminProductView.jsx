@@ -16,7 +16,6 @@ export default function AdminProductView() {
       setProduct(data);
     })();
   }, [productId]);
-  console.log(product);
   if (loading) {
     return <div className="p-6">Loading product details...</div>;
   }
@@ -84,7 +83,7 @@ export default function AdminProductView() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
           <InfoItem label="Name" value={product.seller?.name} />
           <InfoItem label="Email" value={product.seller?.email} />
-          <InfoItem label="Role" value={product.seller?.role} />
+          {/* <InfoItem label="Role" value={product.seller?.role} /> */}
           <InfoItem
             label="Seller Since"
             value={new Date(product.seller?.createdAt).toLocaleDateString()}

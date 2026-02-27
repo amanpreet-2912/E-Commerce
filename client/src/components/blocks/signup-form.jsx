@@ -45,13 +45,12 @@ export function SignupForm({ className, ...props }) {
   async function onSubmit(data) {
     try {
       const res = await signup(data);
-      console.log(res);
 
       setEmail(data.email);
       if (res?.resumeVerification) {
         toast.info("Email already registered. Otp resent.");
       } else {
-        toast.success("Verify Your Email to continue");
+        toast.success("OTP sent to your email.",{description:"Verify to continue creating account."});
       }
       navigate("/verify");
     } catch (err) {
@@ -181,6 +180,9 @@ export function SignupForm({ className, ...props }) {
               id="gstin"
               placeholder="Enter GSTIN"
             />
+            {errors.gstin && (
+              <p className="text-sm text-destructive">{errors.gstin.message}</p>
+            )}
           </Field>
         )}
         {role === "transporter" && (

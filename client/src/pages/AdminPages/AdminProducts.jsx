@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { RowActions } from "@/components/blocks/row-actions";
 import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 export default function AdminProductsPage() {
   const navigate = useNavigate();
@@ -13,6 +14,7 @@ export default function AdminProductsPage() {
   }, []);
   const handleDelete = async (id) => {
     await deleteSellerProduct(id);
+    toast.success("Product Deleted Successfully");  
   };
   const handleView = async (id) => {
     navigate(`/admin/product/${id}`);
@@ -42,6 +44,11 @@ export default function AdminProductsPage() {
       key: "category",
       header: "Category",
       render: (row) => <Badge variant="outline">{row.category}</Badge>,
+    },
+    {
+      key: "subcategory",
+      header: "Sub-Category",
+      render: (row) => <Badge variant="outline">{row.subcategory}</Badge>,
     },
     {
       key: "price",

@@ -1,5 +1,14 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+const addressSchema = new mongoose.Schema({
+  fullname: { type: String, required: true },
+  phone: { type: Number, required: true },
+  addressLine: { type: String, required: true },
+  city: { type: String, required: true },
+  state: { type: String, required: true },
+  pincode: { type: Number, required: true },
+  default: { type: Boolean, default: false },
+});
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -34,13 +43,17 @@ const userSchema = new mongoose.Schema(
       required: function () {
         return this.role === "seller";
       },
+      unique: true,
     },
     vehicleNum: {
       type: String,
       required: function () {
         return this.role === "transporter";
       },
+      unique: true,
     },
+    addresses: [addressSchema],
+
     otp: String,
     otpExpires: Date,
     resetPassword: String,

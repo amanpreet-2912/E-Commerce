@@ -74,21 +74,97 @@ export async function getSingleProduct(productId) {
     throw new Error(err.response?.data?.message);
   }
 }
-export async function getCategories(){
-  try{
-    const response=await adminApi.getCategories();
+export async function getCategories() {
+  try {
+    const response = await adminApi.getCategories();
     return response.data;
-  }catch(err){
-    console.log(err)
-    throw new Error(err.response?.data?.message)
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.response?.data?.message);
   }
 }
-export async function addCategory(data){
-  try{
-    const response=await adminApi.addCategory(data);
+export async function addCategory(data) {
+  try {
+    const response = await adminApi.addCategory(data);
+
     return response.data;
-  }catch(err){
-    console.log(err)
-    throw new Error(err.response?.data?.message)
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.response?.data?.message);
+  }
+}
+export async function deleteCategory(categoryId) {
+  try {
+    const response = await adminApi.deleteCategory(categoryId);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.response?.data?.message);
+  }
+}
+export async function deleteSubCategory(categoryId, subId) {
+  try {
+    const response = await adminApi.deleteSubCategory(categoryId, subId);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.response?.data?.message);
+  }
+}
+export async function addSubCategory(data, categoryId) {
+  try {
+    const response = await adminApi.addSubCategory(data, categoryId);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.response?.data?.message);
+  }
+}
+
+export async function getUsersByRole(type) {
+  try {
+    const response = await adminApi.getUsersByRole(type);
+
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.response?.data?.message);
+  }
+}
+export async function deleteUser(userId) {
+  try {
+    const response = await adminApi.deleteUser(userId);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.response?.data?.message);
+  }
+}
+export async function getOrders() {
+  try {
+    const response = await adminApi.getOrders();
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.response.data.message);
+  }
+}
+export async function getTransporters() {
+  try {
+    const response = await adminApi.getTransporters();
+    console.log(response.data);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.response.data.message);
+  }
+}
+export async function assignTransporter(data) {
+  try {
+    const response = await adminApi.assignTransporter(data);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.response.data.message);
   }
 }

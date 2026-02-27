@@ -12,8 +12,7 @@ import {
   IconFolder,
   IconListDetails,
 } from "@tabler/icons-react";
-import { TableActions } from "@/components/blocks/table";
-import { AdminTable } from "@/components/blocks/Admin-Table";
+
 import { Outlet } from "react-router";
 export default function SellerLayout() {
   const sidebarData = {
@@ -25,12 +24,12 @@ export default function SellerLayout() {
       },
       {
         title: "Products",
-        url: "#",
+        url: "/seller/products",
         icon: IconListDetails,
       },
       {
         title: "Orders",
-        url: "#",
+        url: "/seller/orders",
         icon: IconChartBar,
       },
     ],
@@ -49,13 +48,10 @@ export default function SellerLayout() {
         <div className="flex flex-1 flex-col">
           <div className="@container/main flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
-              <div className="m-5 border rounded-lg">
-                <Outlet/>
-              </div>
+                <Outlet />
             </div>
           </div>
         </div>
-       
       </SidebarInset>
     </SidebarProvider>
   );

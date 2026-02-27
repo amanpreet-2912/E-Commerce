@@ -9,18 +9,19 @@ import { useAdmin } from "@/hooks/useAdmin";
 
 export default function EditProductPage() {
   const { productId } = useParams();
-  const { loading, viewProduct, updateMyProduct } = useSeller();
+  const { loading, viewProduct, updateMyProduct, getcategories } = useSeller();
   const navigate = useNavigate();
   const { register, handleSubmit, reset } = useForm();
-  const { categories, allCategories } = useAdmin();
-
+  // const { categories, allCategories } = useAdmin();
+  const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubcategory, setSelectedSubcategory] = useState("");
   useEffect(() => {
     (async () => {
       const data = await viewProduct(productId);
       reset(data);
-      await allCategories();
+      const cats = await getcategories();
+      setCategories(cats);
     })();
   }, [productId]);
   const selectedCat = categories.find((category) => {
@@ -28,12 +29,13 @@ export default function EditProductPage() {
   });
   const subcategories = selectedCat ? selectedCat.subcategories : [];
   const onSubmit = async (data) => {
-    const newData={...data,
-      category:selectedCategory,
-      subcategory:selectedSubcategory
-    }
-    console.log(data)
-    console.log("new data",newData)
+    const newData = {
+      ...data,
+      category: selectedCategory,
+      subcategory: selectedSubcategory,
+    };
+    console.log(data);
+    console.log("new data", newData);
     await updateMyProduct(productId, data);
     navigate(`/seller/products/${productId}`);
   };
@@ -61,7 +63,6 @@ export default function EditProductPage() {
         <Input type="number" {...register("stock")} />
       </Field>
 
-     
       <select
         value={selectedCategory}
         onChange={(e) => {

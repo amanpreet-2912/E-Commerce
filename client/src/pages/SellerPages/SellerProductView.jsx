@@ -11,7 +11,7 @@ export default function SellerProductView() {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    if (!productId) return;
+  
 
     (async () => {
       const data = await viewProduct(productId);

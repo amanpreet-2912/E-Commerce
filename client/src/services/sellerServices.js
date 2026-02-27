@@ -42,12 +42,40 @@ export async function viewMyProduct(productId) {
     throw new Error(err.response?.data?.message);
   }
 }
-export async function updateProduct(productId,data) {
+export async function updateProduct(productId, data) {
   try {
-    const response = await sellerApi.updateProduct(productId,data);
+    const response = await sellerApi.updateProduct(productId, data);
     return response.data;
   } catch (err) {
     console.log(err);
     throw new Error(err.response?.data?.message);
+  }
+}
+export async function getCategories() {
+  try {
+    const response = await sellerApi.getCategories();
+
+    return response.data;
+  } catch {
+    console.log(err);
+    throw new Error("Error getting categories");
+  }
+}
+export async function getSellerDashboard() {
+  try {
+    const response = await sellerApi.getSellerDashboard();
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.response.data.message);
+  }
+}
+export async function getSellerOrders() {
+  try {
+    const response = await sellerApi.getSellerOrders();
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.response.data.message);
   }
 }

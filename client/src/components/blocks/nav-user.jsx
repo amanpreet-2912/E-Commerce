@@ -6,7 +6,7 @@ import {
   IconUserCircle,
   IconSettings,
 } from "@tabler/icons-react";
-
+import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -24,8 +24,12 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useNavigate } from "react-router";
+import { useRegister } from "@/hooks/useRegister";
+import { useAuthStore } from "@/store/authStore";
 
 export function NavUser({ user }) {
+  const { logout } = useRegister();
+  const { clearUser } = useAuthStore();
   const { isMobile } = useSidebar();
   const navigate = useNavigate();
   function handleOnClick() {
@@ -33,6 +37,13 @@ export function NavUser({ user }) {
   }
   async function handleProfile() {
     navigate(`/${user.role}/profile`);
+  }
+  async function handleLogout() {
+    
+    await logout();
+    clearUser();
+    toast.success("Logged out")
+    navigate("/");
   }
   return (
     <SidebarMenu>
@@ -82,13 +93,13 @@ export function NavUser({ user }) {
                 <IconUserCircle className="focus:text-background" />
                 Manage Profile
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleOnClick}>
+              {/* <DropdownMenuItem onClick={handleOnClick}>
                 <IconSettings className="focus:text-background" />
                 Settings
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
             </DropdownMenuGroup>
-            <DropdownMenuItem >
-              <IconLogout className="focus:text-background"  />
+            <DropdownMenuItem onClick={handleLogout}>
+              <IconLogout className="focus:text-background" />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

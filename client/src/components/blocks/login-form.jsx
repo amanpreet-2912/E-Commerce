@@ -34,7 +34,6 @@ export function LoginForm({ className, ...props }) {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setError,
   } = form;
   const { setUser } = useAuthStore();
   async function onSubmit(data) {
@@ -45,11 +44,11 @@ export function LoginForm({ className, ...props }) {
         toast.info("Please verify your email first", {
           description: "OTP sent to your email",
         });
-        return navigate("/verify");
+        return navigate("/verify", { replace: true });
       }
 
       const user = res.user;
-      console.log(user);
+
       setUser(user);
 
       toast.success("Logged in Successfully");
@@ -58,6 +57,7 @@ export function LoginForm({ className, ...props }) {
         navigate("/admin/dashboard", { replace: true });
         return;
       }
+     
       if (
         (user.role === "seller" || user.role === "transporter") &&
         user.approvalStatus !== "approved"
@@ -69,14 +69,17 @@ export function LoginForm({ className, ...props }) {
           navigate("/seller/dashboard", { replace: true });
           break;
         case "transporter":
-          navigate("/transporter/dashboard", { replace: true });
+          navigate("/transporter", { replace: true });
+          break;
+        case "user":
+          navigate("/user/products", { replace: true });
           break;
         default:
           navigate("/", { replace: true });
       }
     } catch (err) {
       console.log(err);
-      toast.error("Something went wrong");
+      toast.error(err.message || "Something went wrong");
     }
   }
   return (

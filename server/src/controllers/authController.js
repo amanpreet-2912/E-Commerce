@@ -1,7 +1,7 @@
 import { User } from "../models/userSchema.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { sendOtpEmail } from "../utils/sendEmail.js";
+import { sendEmail } from "../utils/sendEmail.js";
 function generateOtp() {
   let otp = "";
   for (let i = 0; i < 6; i++) {
@@ -24,20 +24,43 @@ export async function registerUser(req, res) {
       exists.otp = otp;
       exists.otpExpires = Date.now() + 10 * 60 * 1000;
       await exists.save();
-      await sendOtpEmail(email, otp);
+      await sendEmail({
+        to: user.email,
+        subject: "Email Verification OTP",
+        html: `<h2>Your OTP is: ${otp}</h2>`,
+      });
       return res.status(200).json({
         message: "Email not Verified, Otp resent",
         resumeVerification: true,
       });
     }
-    if (role === "seller" && !gstin) {
-      return res.status(400).json({ message: "GSTIN is required for sellers" });
+    if (role === "seller") {
+      if (!gstin) {
+        return res
+          .status(400)
+          .json({ message: "GSTIN is required for sellers" });
+      }
+      const sellers = await User.findOne({ gstin });
+      if (sellers) {
+        return res
+          .status(400)
+          .json({ message: "Gstin is already registered." });
+      }
     }
-    if ((role === "transporter") & !vehicleNum) {
-      return res
-        .status(400)
-        .json({ message: "Vehicle Number is required for Transporters" });
+    if (role === "transporter") {
+      if (!vehicleNum) {
+        return res
+          .status(400)
+          .json({ message: "Vehicle Number is required for Transporters" });
+      }
+      const vehicles = await User.findOne({ vehicleNum });
+      if (vehicles) {
+        return res
+          .status(400)
+          .json({ message: "Vehicle Number is already registered." });
+      }
     }
+   
     const otp = generateOtp();
     let approved = "approved";
 
@@ -56,7 +79,11 @@ export async function registerUser(req, res) {
       role: role,
       approvalStatus: approved,
     });
-    await sendOtpEmail(user.email, otp);
+    await sendEmail({
+      to: user.email,
+      subject: "Email Verification OTP",
+      html: `<h2>Your OTP is: ${otp}</h2>`,
+    });
     res.status(201).json({ message: "Registered" });
   } catch (err) {
     console.log(err);
@@ -102,7 +129,11 @@ export async function loginUser(req, res) {
       user.otp = otp;
       user.otpExpires = Date.now() + 10 * 60 * 1000;
       await user.save();
-      await sendOtpEmail(email, otp);
+      await sendEmail({
+        to: user.email,
+        subject: "Email Verification OTP",
+        html: `<h2>Your OTP is: ${otp}</h2>`,
+      });
       return res.status(200).json({
         resumeVerification: true,
       });
@@ -178,7 +209,11 @@ export async function forgotPassword(req, res) {
     user.resetPassword = otp;
     user.resetPasswordExpires = Date.now() + 10 * 60 * 1000;
     await user.save();
-    await sendOtpEmail(email, otp);
+    await sendEmail({
+      to: user.email,
+      subject: "Email Verification OTP",
+      html: `<h2>Your OTP is: ${otp}</h2>`,
+    });
     res.status(200).json({ message: "OTP sent for password reset" });
   } catch (err) {
     console.log(err);
@@ -206,4 +241,10 @@ export async function resetPassword(req, res) {
     console.log(err);
     res.status(400).json({ message: "error resetting password" });
   }
+}
+export async function logoutUser(req, res) {
+  res.clearCookie("token", {
+    httpOnly: true,
+  });
+  res.status(200).json({ message: "Logged out successfully" });
 }

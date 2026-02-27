@@ -12,7 +12,15 @@ import {
   getSingleProduct,
   addCategory,
   addSubCategory,
-  getAllCategories
+  getAllCategories,
+  deleteSubCategory,
+  deleteCategory,
+  getUsersByRole,
+  deleteUser,
+  getOrders,
+  assignTransporter,
+  getTransporters,
+  editCategory,
 } from "../controllers/adminController.js";
 const router = Router();
 // router.use(checkToken);
@@ -26,6 +34,17 @@ router.get("/adminInfo", getAdminInfo);
 router.delete("/products/:productId", deleteProduct);
 router.get("/products/:productId", getSingleProduct);
 router.post("/category", addCategory);
-router.post("/subcategory/:categoryId",addSubCategory)
-router.get("/categories",getAllCategories)
+router.get("/categories", getAllCategories);
+router.delete("/categories/:categoryId", deleteCategory);
+router.post("/subcategory/:categoryId", addSubCategory);
+router.delete(
+  "/categories/:categoryId/subcategories/:subcategoryId",
+  deleteSubCategory,
+);
+router.delete("/users/:userId",deleteUser)
+router.get("/users/:type",getUsersByRole)
+router.get("/orders",getOrders)
+router.patch("/assign",assignTransporter)
+router.get("/transporters",getTransporters)
+router.get("/edit-category/:categoryId",editCategory)
 export default router;

@@ -9,18 +9,19 @@ import { Field, FieldLabel } from "@/components/ui/field";
 import { UploadCloud } from "lucide-react";
 import { useEffect, useState } from "react";
 import { MoveLeft } from "lucide-react";
-import { useAdmin } from "@/hooks/useAdmin";
 
 export default function CreateProductPage() {
-  const { loading, createNewProduct } = useSeller();
+  const { loading, createNewProduct, getcategories } = useSeller();
   const navigate = useNavigate();
   const [previewImages, setPreviewImages] = useState([]);
-  const { categories, allCategories } = useAdmin();
+
+  const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubcategory, setSelectedSubcategory] = useState("");
   useEffect(() => {
     (async () => {
-      await allCategories();
+      const data = await getcategories();
+      setCategories(data);
     })();
   }, []);
   const selectedCat = categories.find((category) => {
@@ -29,7 +30,7 @@ export default function CreateProductPage() {
   const subcategories = selectedCat ? selectedCat.subcategories : [];
 
   const form = useForm({
-    // resolver: zodResolver(productSchema),
+    resolver: zodResolver(productSchema),
     defaultValues: {
       name: "",
       description: "",
@@ -60,7 +61,6 @@ export default function CreateProductPage() {
           formData.append("images", file);
         });
       }
-    
 
       await createNewProduct(formData);
       navigate("/seller/dashboard");
@@ -88,7 +88,9 @@ export default function CreateProductPage() {
           type="button"
           variant="ghost"
           size="icon"
-          onClick={() => navigate("/seller/dashboard")}
+          onClick={() => navigate("/seller/dashboard")
+          }
+          className={"hover:text-background"}
         >
           <MoveLeft className="w-5 h-5" />
         </Button>
@@ -167,25 +169,30 @@ export default function CreateProductPage() {
 
         <div className="grid grid-cols-2 gap-4">
           <select
+            className="border rounded-lg p-3"
             value={selectedCategory}
             onChange={(e) => {
               setSelectedCategory(e.target.value);
               setSelectedSubcategory("");
             }}
           >
-            <option value="">Select Category</option>
+            <option>Select Category</option>
+
             {categories.map((cat) => (
               <option key={cat._id} value={cat._id}>
                 {cat.name}
               </option>
             ))}
           </select>
+
           <select
+            className="border rounded-lg p-3"
             value={selectedSubcategory}
             onChange={(e) => setSelectedSubcategory(e.target.value)}
             disabled={!selectedCategory}
           >
-            <option value="">Select Subcategory</option>
+            <option>Select Subcategory</option>
+
             {subcategories.map((sub) => (
               <option key={sub._id} value={sub._id}>
                 {sub.name}

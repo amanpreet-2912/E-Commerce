@@ -10,4 +10,14 @@ export const adminApi = {
   getSingleProduct: (productId) => api.get(`/admin/products/${productId}`),
   getCategories: () => api.get("/admin/categories"),
   addCategory: (data) => api.post("/admin/category", data),
+  addSubCategory: (data, categoryId) =>
+    api.post(`/admin/subcategory/${categoryId}`, data),
+  deleteSubCategory: (categoryId, subId) =>
+    api.delete(`/admin/categories/${categoryId}/subcategories/${subId}`),
+  deleteCategory: (categoryId) => api.delete(`/admin/categories/${categoryId}`),
+  getUsersByRole: (type) => api.get(`/admin/users/${type}`),
+  deleteUser: (userId) => api.delete(`/admin/users/${userId}`),
+  getOrders: () => api.get("/admin/orders"),
+  assignTransporter: (data) => api.patch("/admin/assign",data),
+  getTransporters: () => api.get("/admin/transporters"),
 };

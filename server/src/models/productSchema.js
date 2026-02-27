@@ -30,7 +30,7 @@ const productSchema = new mongoose.Schema(
     },
     subcategoryId: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
+      required: true,  
       index: true,
     },
     seller: {

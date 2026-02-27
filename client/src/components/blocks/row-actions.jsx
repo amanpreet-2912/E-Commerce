@@ -26,6 +26,7 @@ export function RowActions({ actions = [] }) {
             {action.separator && <DropdownMenuSeparator />}
 
             <DropdownMenuItem
+            
               onClick={action.onClick}
               disabled={action.disabled}
               className={`

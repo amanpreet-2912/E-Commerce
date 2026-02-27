@@ -1,14 +1,16 @@
 import { User } from "../models/userSchema.js";
 import { Product } from "../models/productSchema.js";
 import { Category } from "../models/categorySchema.js";
+import { Order } from "../models/orderSchema.js";
+import { sendEmail } from "../utils/sendEmail.js";
 export async function getUsers(req, res) {
   try {
     const users = await User.find({
-      role: { $in: ["seller", "transporter"] },
+      role: { $in: ["seller", "transporter", "user"] },
     }).select("name email role createdAt");
     res.json(users);
   } catch (err) {
-    console.log("error geeting users", err);
+    console.log("error getting users", err);
     return res.json({ message: "error in fetching users" });
   }
 }
@@ -26,7 +28,6 @@ export async function getPendingRequests(req, res) {
 }
 export async function approveRequest(req, res) {
   try {
-    console.log(req.params);
     const { userId } = req.params;
     const user = await User.findById(userId);
     if (!user) {
@@ -74,11 +75,22 @@ export async function getAllProducts(req, res) {
     if (subcategory) filter.subcategory = subcategory;
     const products = await Product.find(filter)
       .populate("seller", "name role email createdAt")
+      .populate("categoryId")
       .sort({ createdAt: -1 });
-    console.log(products);
+    const newObj = products.map((product) => {
+      const subcategory = product.categoryId.subcategories.id(
+        product.subcategoryId,
+      );
+      return {
+        ...product.toObject(),
+        category: product.categoryId.name,
+        subcategory: subcategory.name,
+      };
+    });
+
     res.json({
       count: products.length,
-      products,
+      newObj,
     });
   } catch (err) {
     console.log(err);
@@ -92,10 +104,12 @@ export async function getAdminInfo(req, res) {
       approvalStatus: "pending",
     });
     const totalProducts = await Product.countDocuments();
+    const totalOrders = await Order.countDocuments();
     res.status(200).json({
       totalUsers,
       pendingRequests,
       totalProducts,
+      totalOrders,
     });
   } catch (err) {
     console.log(err);
@@ -119,23 +133,40 @@ export async function deleteProduct(req, res) {
 export async function getSingleProduct(req, res) {
   try {
     const { productId } = req.params;
-    const product = await Product.findById(productId).populate(
-      "seller",
-      "name email role createdAt",
-    );
+    const product = await Product.findById(productId)
+      .populate("seller", "name email role createdAt")
+      .populate("categoryId");
     if (!product) {
       return res.json({ message: "product not found" });
     }
-    return res.json({ product });
+    const subcategory = product.categoryId.subcategories.id(
+      product.subcategoryId,
+    );
+
+    const newProduct = {
+      ...product.toObject(),
+      category: product.categoryId.name,
+      subcategory: subcategory.name,
+    };
+
+    return res.json({ newProduct });
   } catch (err) {
     console.log(err);
-    res.json({ message: "error getting product" });
+    res.json({ message: "Error getting product" });
   }
 }
 export async function addCategory(req, res) {
   try {
     const { name } = req.body;
     const exists = await Category.findOne({ name });
+    const categories = await Category.find();
+    const duplicates = categories.find((category) => {
+      return category.name.toLowerCase() === name.toLowerCase();
+    });
+    if (duplicates) {
+      return res.status(404).json({ message: "Category already exists" });
+    }
+
     if (exists) {
       return res.status(400).json({ message: "Category already exists" });
     }
@@ -149,14 +180,14 @@ export async function addCategory(req, res) {
 export async function addSubCategory(req, res) {
   try {
     const { categoryId } = req.params;
-    console.log(categoryId);
+
     const { name } = req.body;
     const category = await Category.findById(categoryId);
     if (!category) {
-      return res.status(400).json({ message: "NO such catgeory exists" });
+      return res.status(400).json({ message: "No such catgeory exists" });
     }
     const subcategories = category.subcategories;
-    
+
     const exists = subcategories.find((sub) => {
       return sub.name.toLowerCase() === name.toLowerCase();
     });
@@ -168,17 +199,131 @@ export async function addSubCategory(req, res) {
     res.status(200).json({ message: "subcategory added", category });
   } catch (err) {
     console.log(err);
-    res.json(400).json({ message: "error adding subcategory" });
+    res.json(400).json({ message: "Error adding subcategory" });
   }
 }
 export async function getAllCategories(req, res) {
   try {
     const categories = await Category.find();
-    console.log(categories)
     res.status(200).json({ categories });
   } catch (err) {
     console.log(err);
-    res.status(400).json({ message: "error getting categories" });
+    res.status(400).json({ message: "Error getting categories" });
   }
 }
-  
+
+export async function deleteSubCategory(req, res) {
+  try {
+    const { categoryId, subcategoryId } = req.params;
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      return res.status(404).json({ message: "category not found" });
+    }
+    category.subcategories.id(subcategoryId).deleteOne();
+    await category.save();
+    res.status(200).json({ message: "Subcategory deleted" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error deleting Subcategory" });
+  }
+}
+export async function deleteCategory(req, res) {
+  try {
+    const { categoryId } = req.params;
+    console.log(categoryId);
+    await Category.findByIdAndDelete(categoryId);
+    res.status(200).json({ message: "Category Deleted" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error deleteing category" });
+  }
+}
+export async function getUsersByRole(req, res) {
+  try {
+    const { type } = req.params;
+    const users = await User.find({
+      role: { $in: type },
+      approvalStatus: "approved",
+    }).select("name email role createdAt");
+    res.status(200).json({ users });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error fetching users by role" });
+  }
+}
+export async function deleteUser(req, res) {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const email = user.email;
+    if (user.role === "seller") {
+      await Product.deleteMany({ seller: userId });
+    }
+    await User.findByIdAndDelete(userId);
+    console.log(email);
+    await sendEmail({
+      to: email,
+      subject: "Account Removed",
+      html: "<h2>Your MernMart Account has been removed by the admin",
+    });
+    res.status(200).json({ message: "User Deleted" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error deleting user" });
+  }
+}
+export async function getOrders(req, res) {
+  try {
+    const orders = await Order.find()
+      .populate("user", "name email")
+      .populate("orderItems.product", "name price");
+    res.json({ orders: orders });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error fetching orders" });
+  }
+}
+export async function assignTransporter(req, res) {
+  try {
+    const { orderId, transporterId } = req.body;
+    const order = await Order.findById(orderId);
+    if (!order) {
+      return res.status(404).json({ message: "order not found" });
+    }
+    order.transporter = transporterId;
+    order.status = "Assigned";
+    await order.save();
+    res.json({ message: "Transporter Assigned" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error assigning Transporter" });
+  }
+}
+export async function getTransporters(req, res) {
+  try {
+    const transporters = await User.find({
+      role: "transporter",
+      approvalStatus: "approved",
+    }).select("name email");
+    res.json({ transporters });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "error fetching transporters" });
+  }
+}
+export async function editCategory(req, res) {
+  try {
+    const { categoryId } = req.params;
+    const { name } = req.body;
+    const category = await Category.findByIdAndUpdate(categoryId,{name},{new:true});
+    category.name = name;
+    await category.save();
+    res.json({ category });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Error adding category" });
+  }
+}

@@ -47,10 +47,18 @@ export async function forgotPassword(data) {
 export async function resetPassword(data) {
   try {
     const response = await authApi.resetPassword(data);
-    console.log(response);
     return response.data;
   } catch (err) {
     console.log(err);
     throw new Error(err.response.data.message);
+  }
+}
+export async function logoutUser() {
+  try {
+    const response = await authApi.logout();
+    return response.data;
+  } catch (err) {
+    console.log(err);
+    
   }
 }
