@@ -104,9 +104,9 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 230.114672406366,
-			"y": -343.06972009249665,
-			"z": 0.8152362151974619,
+			"x": -872.1357751861354,
+			"y": -256.80508528803495,
+			"z": 0.6032831040783191,
 			"meta": {},
 			"id": "camera:page:page",
 			"typeName": "camera"
@@ -138,7 +138,7 @@
 			"props": {
 				"color": "black",
 				"size": "m",
-				"w": 418.84375,
+				"w": 1539,
 				"font": "draw",
 				"textAlign": "start",
 				"autoSize": true,
@@ -345,6 +345,18 @@
 							"type": "paragraph",
 							"attrs": {
 								"dir": "auto"
+							},
+							"content": [
+								{
+									"type": "text",
+									"text": "getting the number of products undereach category and showing it in the admin category table along with the categories"
+								}
+							]
+						},
+						{
+							"type": "paragraph",
+							"attrs": {
+								"dir": "auto"
 							}
 						},
 						{
@@ -521,8 +533,8 @@
 			"screenBounds": {
 				"x": 0,
 				"y": 0,
-				"w": 932,
-				"h": 627.3333740234375
+				"w": 616,
+				"h": 499.3333435058594
 			},
 			"insets": [
 				false,

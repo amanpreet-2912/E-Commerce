@@ -74,3 +74,21 @@ export async function getSingleProduct(productId) {
     throw new Error(err.response?.data?.message);
   }
 }
+export async function getCategories(){
+  try{
+    const response=await adminApi.getCategories();
+    return response.data;
+  }catch(err){
+    console.log(err)
+    throw new Error(err.response?.data?.message)
+  }
+}
+export async function addCategory(data){
+  try{
+    const response=await adminApi.addCategory(data);
+    return response.data;
+  }catch(err){
+    console.log(err)
+    throw new Error(err.response?.data?.message)
+  }
+}

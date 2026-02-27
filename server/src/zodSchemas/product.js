@@ -5,6 +5,6 @@ export const productSchema = z.object({
   price: z.coerce.number().positive("price must be greater tan 0"),
   stock: z.coerce.number().positive("stock must be greater than 0"),
   images: z.any().optional(),
-  category: z.string(),
-  subcategory: z.string(),
+  categoryId: z.string(),
+  subcategoryid: z.string(),
 });

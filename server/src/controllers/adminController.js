@@ -1,5 +1,6 @@
 import { User } from "../models/userSchema.js";
 import { Product } from "../models/productSchema.js";
+import { Category } from "../models/categorySchema.js";
 export async function getUsers(req, res) {
   try {
     const users = await User.find({
@@ -131,3 +132,53 @@ export async function getSingleProduct(req, res) {
     res.json({ message: "error getting product" });
   }
 }
+export async function addCategory(req, res) {
+  try {
+    const { name } = req.body;
+    const exists = await Category.findOne({ name });
+    if (exists) {
+      return res.status(400).json({ message: "Category already exists" });
+    }
+    const category = await Category.create({ name });
+    res.status(200).json({ message: "Category Created", category });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: "Error adding Category" });
+  }
+}
+export async function addSubCategory(req, res) {
+  try {
+    const { categoryId } = req.params;
+    console.log(categoryId);
+    const { name } = req.body;
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      return res.status(400).json({ message: "NO such catgeory exists" });
+    }
+    const subcategories = category.subcategories;
+    
+    const exists = subcategories.find((sub) => {
+      return sub.name.toLowerCase() === name.toLowerCase();
+    });
+    if (exists) {
+      return res.status(400).json({ message: "subcategory already exists" });
+    }
+    category.subcategories.push({ name });
+    await category.save();
+    res.status(200).json({ message: "subcategory added", category });
+  } catch (err) {
+    console.log(err);
+    res.json(400).json({ message: "error adding subcategory" });
+  }
+}
+export async function getAllCategories(req, res) {
+  try {
+    const categories = await Category.find();
+    console.log(categories)
+    res.status(200).json({ categories });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: "error getting categories" });
+  }
+}
+  

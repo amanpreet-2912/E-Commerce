@@ -21,6 +21,8 @@ import { ResetPassword } from "./pages/AuthPages/ResetPassword";
 import ForgotPassword from "./pages/AuthPages/ForgotPassword";
 import SellerProfile from "./pages/SellerPages/SellerProfile";
 import AdminProfile from "./pages/AdminPages/AdminProfile";
+import AdminCategories from "./pages/AdminPages/AdminCategories";
+import Demo from "./pages/demo";
 function App() {
   return (
     <BrowserRouter>
@@ -31,6 +33,7 @@ function App() {
         <Route path="unauthorized" element={<UnauthorizedPage />} />
         <Route path="reset-password" element={<ResetPassword />} />
         <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="demo" element={<Demo />} />
 
         <Route element={<ProtectedRoute />}>
           <Route element={<AdminRoutes />}>
@@ -42,6 +45,7 @@ function App() {
                 element={<AdminProductView />}
               />
               <Route path="/admin/profile" element={<AdminProfile />} />
+              <Route path="/admin/categories" element={<AdminCategories />} />
             </Route>
           </Route>
           <Route element={<SellerRoutes />}>

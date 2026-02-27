@@ -20,7 +20,7 @@ router.get("/products", getProducts);
 router.post(
   "/products",
   upload.array("images", 5),
-  validate(productSchema),
+  // validate(productSchema),
   createProduct,
 );
 router.get("/product/:productId", viewProduct);

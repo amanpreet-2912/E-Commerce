@@ -8,6 +8,8 @@ import {
   getAdminStat,
   getSingleProduct,
   deleteProduct,
+  getCategories,
+  addCategory,
 } from "@/services/adminServices";
 export function useAdmin() {
   const [loading, setLoading] = useState(false);
@@ -18,6 +20,7 @@ export function useAdmin() {
     pendingRequests: 0,
     totalProducts: 0,
   });
+  const [categories, setCategories] = useState([]);
 
   const allUsers = async () => {
     setLoading(true);
@@ -106,9 +109,28 @@ export function useAdmin() {
       setLoading(false);
     }
   };
+  const allCategories = async () => {
+    setLoading(true);
+    try {
+      const data = await getCategories();
+      setCategories(data.categories);
+      
+    } finally {
+      setLoading(false);
+    }
+  };
+  const addNewCategory = async (data) => {
+    setLoading(true);
+    try {
+      const data = await addCategory(data);
+      return data;
+    } finally {
+      setLoading(false);
+    }
+  };
   return {
     deleteSellerProduct,
-    viewProduct, 
+    viewProduct,
     loading,
     reject,
     approve,
@@ -119,5 +141,8 @@ export function useAdmin() {
     allProducts,
     adminInfo,
     data,
+    categories,
+    addNewCategory,
+    allCategories,
   };
 }

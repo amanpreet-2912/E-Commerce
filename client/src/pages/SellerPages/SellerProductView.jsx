@@ -5,7 +5,7 @@ import { useSeller } from "@/hooks/useSeller";
 import { Button } from "@/components/ui/button";
 
 export default function SellerProductView() {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const { productId } = useParams();
   const { viewProduct, loading } = useSeller();
   const [product, setProduct] = useState(null);
@@ -15,13 +15,14 @@ export default function SellerProductView() {
 
     (async () => {
       const data = await viewProduct(productId);
+      
       setProduct(data);
     })();
   }, [productId]);
-  const handleEdit=()=>{
-    navigate(`/seller/product/${productId}/edit`)
-
-  }
+ 
+  const handleEdit = () => {
+    navigate(`/seller/product/${productId}/edit`);
+  };
   if (loading) {
     return <div className="p-6">Loading product details...</div>;
   }

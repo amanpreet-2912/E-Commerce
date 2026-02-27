@@ -12,7 +12,9 @@ export function SellerTable() {
 
   useEffect(() => {
     getMyProducts();
+    
   }, []);
+  console.log(products)
   const handleView = (id) => {
     navigate(`/seller/products/${id}`);
   };

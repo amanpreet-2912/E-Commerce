@@ -8,4 +8,6 @@ export const adminApi = {
   getAdminInfo: () => api.get("/admin/adminInfo"),
   deleteProduct: (productId) => api.delete(`/admin/products/${productId}`),
   getSingleProduct: (productId) => api.get(`/admin/products/${productId}`),
+  getCategories: () => api.get("/admin/categories"),
+  addCategory: (data) => api.post("/admin/category", data),
 };

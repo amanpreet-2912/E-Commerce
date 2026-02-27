@@ -43,7 +43,8 @@ export function useSeller() {
     setLoading(true);
     try {
       const data = await viewMyProduct(productId);
-      return data.product;
+      
+      return data;
     } finally {
       setLoading(false);
     }

@@ -7,10 +7,9 @@ const productSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: true,
     },
     price: {
-      type: String,
+      type: Number,
       required: true,
       min: 0,
     },
@@ -23,13 +22,14 @@ const productSchema = new mongoose.Schema(
       type: [String],
       defult: [],
     },
-    category: {
-      type: String,
+    categoryId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
       required: true,
       index: true,
     },
-    subcategory: {
-      type: String,
+    subcategoryId: {
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
       index: true,
     },
