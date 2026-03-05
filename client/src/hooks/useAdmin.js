@@ -10,21 +10,18 @@ import {
   deleteProduct,
   getCategories,
   addCategory,
-  deleteCategory,
   addSubCategory,
-  deleteSubCategory,
   getUsersByRole,
   deleteUser,
   getOrders,
   getTransporters,
   assignTransporter,
+  editCategory,
 } from "@/services/adminServices";
-import z from "zod";
 export function useAdmin() {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const [products, setProducts] = useState([]);
-
 
   const [categories, setCategories] = useState([]);
 
@@ -78,7 +75,6 @@ export function useAdmin() {
     setLoading(true);
     try {
       const data = await getAllProducts();
-      console.log(data.newObj);
       setProducts(data.newObj);
     } finally {
       setLoading(false);
@@ -135,15 +131,7 @@ export function useAdmin() {
       setLoading(false);
     }
   };
-  const deletecategory = async (categoryId) => {
-    setLoading(true);
-    try {
-      await deleteCategory(categoryId);
-      setCategories((prev) => prev.filter((cat) => cat._id !== categoryId));
-    } finally {
-      setLoading(false);
-    }
-  };
+
   const addSubcategory = async (data, categoryId) => {
     setLoading(true);
     try {
@@ -156,28 +144,7 @@ export function useAdmin() {
       setLoading(false);
     }
   };
-  const deleteSubcategory = async (categoryId, subId) => {
-    setLoading(true);
-    try {
-      await deleteSubCategory(categoryId, subId);
-      setCategories((prev) => {
-        return prev.map((cat) => {
-          if (cat._id === categoryId) {
-            const updatedSubcategories = cat.subcategories.filter((sub) => {
-              return sub._id !== subId;
-            });
-            return {
-              ...cat,
-              subcategories: updatedSubcategories,
-            };
-          }
-          return cat;
-        });
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+
   const usersByRole = async (type) => {
     setLoading(true);
     try {
@@ -208,7 +175,6 @@ export function useAdmin() {
     setLoading(true);
     try {
       const data = await getTransporters();
-      console.log(data.transporters);
       return data.transporters;
     } finally {
       setLoading(false);
@@ -218,6 +184,20 @@ export function useAdmin() {
     setLoading(true);
     try {
       const res = await assignTransporter(data);
+      return res;
+    } finally {
+      setLoading(false);
+    }
+  };
+  const editcategory = async (data, categoryId) => {
+    setLoading(true);
+    try {
+      const res = await editCategory(data, categoryId);
+      setCategories((prev) => 
+        prev.map((category) =>
+          category._id === categoryId ? res.category : category,
+        )
+      );
       return res;
     } finally {
       setLoading(false);
@@ -235,12 +215,11 @@ export function useAdmin() {
     products,
     allProducts,
     adminInfo,
-   
+    editcategory,
     categories,
     addNewCategory,
     allCategories,
-    deletecategory,
-    deleteSubcategory,
+
     addSubcategory,
     usersByRole,
     deleteuser,

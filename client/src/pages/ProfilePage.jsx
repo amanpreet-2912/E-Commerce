@@ -2,11 +2,10 @@ import { useAuthStore } from "@/store/authStore";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Mail, User, Calendar, Award } from "lucide-react";
+import { Mail, User, Calendar, Award,FileCheck } from "lucide-react";
 
 export default function ProfilePage() {
   const { user } = useAuthStore();
-
   if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -97,6 +96,24 @@ export default function ProfilePage() {
                 </span>
                 <span className="capitalize">{user.role}</span>
               </div>
+              {user.role=="seller" &&
+              <div className="flex justify-between items-center">
+                <span className="text-muted-foreground flex items-center gap-2">
+                  <FileCheck size={16} />
+                 GSTIN
+                </span>
+                <span className="capitalize">{user.gstin}</span>
+              </div>
+              }
+              {user.role=="transporter" &&
+              <div className="flex justify-between items-center">
+                <span className="text-muted-foreground flex items-center gap-2">
+                  <FileCheck size={16} />
+                 Vehicle No.
+                </span>
+                <span className="capitalize">{user.gstin}</span>
+              </div>
+              }
             </CardContent>
           </Card>
         </div>

@@ -9,3 +9,4 @@ export async function connectDB() {
     console.log("Error COnnecting DB", err);
   }
 }
+  

@@ -212,32 +212,6 @@ export async function getAllCategories(req, res) {
   }
 }
 
-export async function deleteSubCategory(req, res) {
-  try {
-    const { categoryId, subcategoryId } = req.params;
-    const category = await Category.findById(categoryId);
-    if (!category) {
-      return res.status(404).json({ message: "category not found" });
-    }
-    category.subcategories.id(subcategoryId).deleteOne();
-    await category.save();
-    res.status(200).json({ message: "Subcategory deleted" });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Error deleting Subcategory" });
-  }
-}
-export async function deleteCategory(req, res) {
-  try {
-    const { categoryId } = req.params;
-    console.log(categoryId);
-    await Category.findByIdAndDelete(categoryId);
-    res.status(200).json({ message: "Category Deleted" });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Error deleteing category" });
-  }
-}
 export async function getUsersByRole(req, res) {
   try {
     const { type } = req.params;
@@ -318,7 +292,11 @@ export async function editCategory(req, res) {
   try {
     const { categoryId } = req.params;
     const { name } = req.body;
-    const category = await Category.findByIdAndUpdate(categoryId,{name},{new:true});
+    const category = await Category.findByIdAndUpdate(
+      categoryId,
+      { name },
+      { new: true },
+    );
     category.name = name;
     await category.save();
     res.json({ category });

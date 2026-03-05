@@ -13,7 +13,7 @@ export function DataTable({
   emptyText = "No data available",
 }) {
   return (
-    <Table>
+    <Table className={"rounded-lg overflow-hidden"} >
       <TableHeader>
         <TableRow>
           {columns.map((col) => (
@@ -29,7 +29,7 @@ export function DataTable({
 
       <TableBody>
         {data.length === 0 ? (
-          <TableRow>
+          <TableRow  >
             <TableCell
               colSpan={columns.length}
               className="h-24 text-center text-muted-foreground"
@@ -39,7 +39,8 @@ export function DataTable({
           </TableRow>
         ) : (
           data.map((row, index) => (
-            <TableRow key={row._id ?? index}>
+            <TableRow key={row._id ?? index}
+           className={"hover:bg-muted/40 transition"} >
               {columns.map((col) => (
                 <TableCell
                   key={col.key}

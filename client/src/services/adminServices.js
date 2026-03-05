@@ -1,170 +1,71 @@
 import { adminApi } from "@/api/adminApi";
+import { handleRequest } from "@/utils/apiHandler";
+
 export async function getAllUsers() {
-  try {
-    const response = await adminApi.getUsers();
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response?.data?.message || "error in getting users");
-  }
+
+   return handleRequest(()=>adminApi.getUsers())
 }
 export async function getPendingUsers() {
-  try {
-    const response = await adminApi.getPendingUsers();
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(
-      err.response?.data?.message || "error getting pending users",
-    );
-  }
+ 
+   return handleRequest(()=>adminApi.getPendingUsers())
 }
 export async function approveUser(userId) {
-  try {
-    const response = await adminApi.approveUser(userId);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response?.data?.message || "error approving user");
-  }
+ 
+   return handleRequest(()=>adminApi.approveUser(userId))
 }
 export async function rejectUser(userId) {
-  try {
-    const response = await adminApi.rejectUser(userId);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response?.data?.message || "error in rejecting user");
-  }
+
+   return handleRequest(()=>adminApi.rejectUser(userId))
 }
 export async function getAllProducts() {
-  try {
-    const response = await adminApi.getProducts();
-
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response?.data?.message);
-  }
+  return handleRequest(() => adminApi.getProducts());
 }
 export async function getAdminStat() {
-  try {
-    const response = await adminApi.getAdminInfo();
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response?.data?.message);
-  }
+  return handleRequest(() => adminApi.getAdminInfo());
 }
 export async function deleteProduct(productId) {
-  try {
-    const response = await adminApi.deleteProduct(productId);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response?.data?.message);
-  }
+ 
+ return handleRequest(()=>adminApi.deleteProduct(productId))
 }
 export async function getSingleProduct(productId) {
-  try {
-    const response = await adminApi.getSingleProduct(productId);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response?.data?.message);
-  }
+ 
+  return handleRequest(()=>adminApi.getSingleProduct(productId))
 }
 export async function getCategories() {
-  try {
-    const response = await adminApi.getCategories();
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response?.data?.message);
-  }
+ 
+  return handleRequest(()=>adminApi.getCategories())
 }
 export async function addCategory(data) {
-  try {
-    const response = await adminApi.addCategory(data);
+ 
+  return handleRequest(()=>adminApi.addCategory(data))
+}
 
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response?.data?.message);
-  }
-}
-export async function deleteCategory(categoryId) {
-  try {
-    const response = await adminApi.deleteCategory(categoryId);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response?.data?.message);
-  }
-}
-export async function deleteSubCategory(categoryId, subId) {
-  try {
-    const response = await adminApi.deleteSubCategory(categoryId, subId);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response?.data?.message);
-  }
-}
 export async function addSubCategory(data, categoryId) {
-  try {
-    const response = await adminApi.addSubCategory(data, categoryId);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response?.data?.message);
-  }
+ 
+  return handleRequest(()=>adminApi.addSubCategory(data, categoryId))
 }
 
 export async function getUsersByRole(type) {
-  try {
-    const response = await adminApi.getUsersByRole(type);
-
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response?.data?.message);
-  }
+ 
+  return handleRequest(()=>adminApi.getUsersByRole(type))
 }
 export async function deleteUser(userId) {
-  try {
-    const response = await adminApi.deleteUser(userId);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response?.data?.message);
-  }
+ 
+  return handleRequest(()=>adminApi.deleteUser(userId))
 }
 export async function getOrders() {
-  try {
-    const response = await adminApi.getOrders();
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response.data.message);
-  }
+
+  return handleRequest(()=>adminApi.getOrders())
 }
 export async function getTransporters() {
-  try {
-    const response = await adminApi.getTransporters();
-    console.log(response.data);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response.data.message);
-  }
+ 
+  return handleRequest(()=>adminApi.getTransporters())
 }
 export async function assignTransporter(data) {
-  try {
-    const response = await adminApi.assignTransporter(data);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response.data.message);
-  }
+
+   return handleRequest(()=>adminApi.assignTransporter(data))
+}
+export async function editCategory(data, categoryId) {
+ 
+   return handleRequest(()=> adminApi.editCategory(data, categoryId))
 }

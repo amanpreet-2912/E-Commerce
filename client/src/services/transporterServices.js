@@ -1,19 +1,8 @@
 import { transporterApi } from "@/api/transporterApi";
+import { handleRequest } from "@/utils/apiHandler";
 export async function getOrders() {
-  try {
-    const response = await transporterApi.getOrders();
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.message);
-  }
+  return handleRequest(() => transporterApi.getOrders());
 }
 export async function changeStatus(data) {
-  try {
-    const response = await transporterApi.changeStatus(data);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.message);
-  }
+  return handleRequest(() => transporterApi.changeStatus(data));
 }

@@ -1,81 +1,28 @@
 import { sellerApi } from "@/api/sellerApi";
+import { handleRequest } from "@/utils/apiHandler";
 
 export async function getProducts() {
-  try {
-    const response = await sellerApi.getProducts();
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response?.data?.message || "error getting products");
-  }
+  return handleRequest(() => sellerApi.getProducts());
 }
 
 export async function createProduct(data) {
-  try {
-    const response = await sellerApi.createProducts(data);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(
-      err.response?.data?.message || "error creating a new product",
-    );
-  }
+  return handleRequest(() => sellerApi.createProducts(data));
 }
 export async function deleteProduct(productId) {
-  try {
-    const response = await sellerApi.deleteProducts(productId);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(
-      err.response?.data?.message || "error deleting the product",
-    );
-  }
+  return handleRequest(() => sellerApi.deleteProducts(productId));
 }
 export async function viewMyProduct(productId) {
-  try {
-    const response = await sellerApi.viewProduct(productId);
-
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response?.data?.message);
-  }
+  return handleRequest(() => sellerApi.viewProduct(productId));
 }
 export async function updateProduct(productId, data) {
-  try {
-    const response = await sellerApi.updateProduct(productId, data);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response?.data?.message);
-  }
+  return handleRequest(() => sellerApi.updateProduct(productId, data));
 }
 export async function getCategories() {
-  try {
-    const response = await sellerApi.getCategories();
-
-    return response.data;
-  } catch {
-    console.log(err);
-    throw new Error("Error getting categories");
-  }
+  return handleRequest(() => sellerApi.getCategories());
 }
 export async function getSellerDashboard() {
-  try {
-    const response = await sellerApi.getSellerDashboard();
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response.data.message);
-  }
+  return handleRequest(() => sellerApi.getSellerDashboard());
 }
 export async function getSellerOrders() {
-  try {
-    const response = await sellerApi.getSellerOrders();
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response.data.message);
-  }
+  return handleRequest(() => sellerApi.getSellerOrders());
 }

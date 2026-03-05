@@ -13,8 +13,6 @@ import {
   addCategory,
   addSubCategory,
   getAllCategories,
-  deleteSubCategory,
-  deleteCategory,
   getUsersByRole,
   deleteUser,
   getOrders,
@@ -23,8 +21,8 @@ import {
   editCategory,
 } from "../controllers/adminController.js";
 const router = Router();
-// router.use(checkToken);
-// router.use(allowRoles("admin"));
+router.use(checkToken);
+router.use(allowRoles("admin"));
 router.get("/pending", getPendingRequests);
 router.patch("/approve/:userId", approveRequest);
 router.patch("/reject/:userId", rejectRequest);
@@ -35,16 +33,12 @@ router.delete("/products/:productId", deleteProduct);
 router.get("/products/:productId", getSingleProduct);
 router.post("/category", addCategory);
 router.get("/categories", getAllCategories);
-router.delete("/categories/:categoryId", deleteCategory);
 router.post("/subcategory/:categoryId", addSubCategory);
-router.delete(
-  "/categories/:categoryId/subcategories/:subcategoryId",
-  deleteSubCategory,
-);
-router.delete("/users/:userId",deleteUser)
-router.get("/users/:type",getUsersByRole)
-router.get("/orders",getOrders)
-router.patch("/assign",assignTransporter)
-router.get("/transporters",getTransporters)
-router.get("/edit-category/:categoryId",editCategory)
+
+router.delete("/users/:userId", deleteUser);
+router.get("/users/:type", getUsersByRole);
+router.get("/orders", getOrders);
+router.patch("/assign", assignTransporter);
+router.get("/transporters", getTransporters);
+router.patch("/edit-category/:categoryId", editCategory);
 export default router;

@@ -9,11 +9,12 @@ export function StatCard({
   description,
   icon: Icon,
   link = "#",
+  manage
 }) {
   return (
     <div
       className="bg-card rounded-2xl shadow-md border border-border p-6
-      hover:shadow-xl transition-all duration-300 hover:-translate-y-1
+      hover:shadow-xl transition-all duration-300 
       flex flex-col justify-between"
     >
     
@@ -47,7 +48,7 @@ export function StatCard({
       </div>
 
 
-      
+      {manage && 
       <Link
         to={link}
         className="flex items-center justify-between mt-4 text-sm font-medium text-primary"
@@ -56,7 +57,7 @@ export function StatCard({
 
         <ArrowRight className="w-4 h-4" />
       </Link>
-
+}
     </div>
   );
 }

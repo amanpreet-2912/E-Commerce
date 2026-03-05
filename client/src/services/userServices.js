@@ -1,120 +1,43 @@
 import { userApi } from "@/api/userApi";
+import { handleRequest } from "@/utils/apiHandler";
 export async function getCart() {
-  try {
-    const response = await userApi.getCart();
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response.data.message);
-  }
+  return handleRequest(() => userApi.getCart());
 }
 export async function addToCart(data) {
-  try {
-    const response = await userApi.addToCart(data);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response.data.message);
-  }
+  return handleRequest(() => userApi.addToCart(data));
 }
 export async function removeFromCart(productId) {
-  try {
-    const response = await userApi.removeFromCart(productId);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.message);
-  }
+  return handleRequest(() => userApi.removeFromCart(productId));
 }
 export async function getProducts(filters = {}) {
-  try {
-    const response = await userApi.getProducts(filters);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.message);
-  }
+  return handleRequest(() => userApi.getProducts(filters));
 }
 export async function getCategories() {
-  try {
-    const response = await userApi.getCategories();
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.message);
-  }
+  return handleRequest(() => userApi.getCategories());
 }
 
 export async function getSingleProduct(productId) {
-  try {
-    const response = await userApi.getSingleProduct(productId);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.message);
-  }
+  return handleRequest(() => userApi.getSingleProduct(productId));
 }
 export async function updateCartQuantity(productId, quantity) {
-  try {
-    const response = await userApi.updateCartQuantity(productId, quantity);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.message);
-  }
+  return handleRequest(() => userApi.updateCartQuantity(productId, quantity));
 }
 export async function createOrder(data) {
-  try {
-    const response = await userApi.createOrder(data);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.message);
-  }
+  return handleRequest(() => userApi.createOrder(data));
 }
 export async function getOrders() {
-  try {
-    const response = await userApi.getOrders();
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.message);
-  }
+  return handleRequest(() => userApi.getOrders());
 }
 export async function getAddresses() {
-  try {
-    const response = await userApi.getAddresses();
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.message);
-  }
+  return handleRequest(() => userApi.getAddresses());
 }
 export async function addAddress(data) {
-  try {
-    const response = await userApi.addAddress(data);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.message);
-  }
+  return handleRequest(() => userApi.addAddress(data));
 }
 
 export async function setDefaultAddress(addressId) {
-  try {
-    const response = await userApi.setDefaultAddress(addressId);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.message);
-  }
+  return handleRequest(() => userApi.setDefaultAddress(addressId));
 }
 export async function buyNow(data) {
-  try {
-    const response = await userApi.buyNow(data);
-    return response.data;
-  } catch (err) {
-    console.log(err);
-    throw new Error(err.response.message);
-  }
+  return handleRequest(() => userApi.buyNow(data));
 }

@@ -50,7 +50,9 @@ export function SignupForm({ className, ...props }) {
       if (res?.resumeVerification) {
         toast.info("Email already registered. Otp resent.");
       } else {
-        toast.success("OTP sent to your email.",{description:"Verify to continue creating account."});
+        toast.success("OTP sent to your email.", {
+          description: "Verify to continue creating account.",
+        });
       }
       navigate("/verify");
     } catch (err) {
@@ -81,6 +83,7 @@ export function SignupForm({ className, ...props }) {
             id="name"
             type="text"
             placeholder="Enter Your Name"
+            className="focus-visible:ring-2 focus-visible:ring-amber-200"
             required
           />
           {errors.name && (
@@ -94,6 +97,7 @@ export function SignupForm({ className, ...props }) {
             id="email"
             type="email"
             placeholder="Enter Your Email"
+            className="focus-visible:ring-2 focus-visible:ring-amber-200"
             required
           />
           {errors.email && (
@@ -107,6 +111,8 @@ export function SignupForm({ className, ...props }) {
               {...register("password")}
               id="password"
               type={showPassword ? "text" : "password"}
+              placeholder="Create Password"
+              className="focus-visible:ring-2 focus-visible:ring-amber-200"
               required
             />
             <button
@@ -132,45 +138,30 @@ export function SignupForm({ className, ...props }) {
         </Field>
         <Field>
           <FieldLabel>Choose your role</FieldLabel>
+
           <Controller
             name="role"
             control={control}
             render={({ field }) => (
-              <div className="flex gap-4">
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    value="seller"
-                    checked={field.value === "seller"}
-                    onChange={() => field.onChange("seller")}
-                  />
-                  Seller
-                </label>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    value="transporter"
-                    checked={field.value === "transporter"}
-                    onChange={() => field.onChange("transporter")}
-                  />
-                  Transporter
-                </label>
-                <label className="flex items-center gap-2">
-                  <input
-                    type="radio"
-                    value="user"
-                    checked={field.value === "user"}
-                    onChange={() => field.onChange("user")}
-                  />
-                  User
-                </label>
+              <div className="grid grid-cols-3 gap-3 mt-2">
+                {["User", "seller", "transporter"].map((roleOption) => (
+                  <button
+                    type="button"
+                    key={roleOption}
+                    onClick={() => field.onChange(roleOption)}
+                    className={`border rounded-lg p-3 text-sm font-medium transition
+            ${
+              field.value === roleOption
+                ? "border-primary bg-primary/10 text-primary"
+                : "border-muted hover:border-primary"
+            }`}
+                  >
+                    {roleOption.charAt(0).toUpperCase() + roleOption.slice(1)}
+                  </button>
+                ))}
               </div>
             )}
           />
-
-          {errors.role && (
-            <p className="text-sm text-destructive">{errors.role.message}</p>
-          )}
         </Field>
         {role === "seller" && (
           <Field className="mt-1">
@@ -179,6 +170,7 @@ export function SignupForm({ className, ...props }) {
               {...register("gstin")}
               id="gstin"
               placeholder="Enter GSTIN"
+              className="focus-visible:ring-2 focus-visible:ring-amber-200"
             />
             {errors.gstin && (
               <p className="text-sm text-destructive">{errors.gstin.message}</p>
@@ -190,6 +182,7 @@ export function SignupForm({ className, ...props }) {
             <FieldLabel htmlFor="vehicleNum">Vehicle Number</FieldLabel>
             <Input
               placeholder="Enter Vehicle Number"
+              className="focus-visible:ring-2 focus-visible:ring-amber-200"
               {...register("vehicleNum")}
               id="vehicleNum"
             />

@@ -31,7 +31,8 @@ export function NavMain({ items }) {
               asChild
               isActive={isActive}
               className="
-              data-[active=true]:bg-blue-600
+            
+              data-[active=true]:bg-primary
               data-[active=true]:text-white
                hover:bg-sidebar-accent
             "
@@ -53,7 +54,7 @@ export function NavMain({ items }) {
                         asChild
                         isActive={isChild}
                         className="
-                        data-[active=true]:bg-amber-400
+                        data-[active=true]:bg-amber-100
                       "
                       >
                         <Link to={child.url}>{child.title}</Link>

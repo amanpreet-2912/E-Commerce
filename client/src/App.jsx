@@ -37,7 +37,7 @@ import AdminOrders from "./pages/AdminPages/AdminOrdersPage";
 import TransporterPage from "./pages/TransporterPages/TransporterMainPage";
 import Dropdown from "./pages/Dropdown";
 import Checkout from "./pages/UserPages/CheckoutPage";
-
+import AuroraBackgroundDemo from "./components/aurora-background-demo";
 function App() {
   return (
     <BrowserRouter>
@@ -49,7 +49,7 @@ function App() {
         <Route path="reset-password" element={<ResetPassword />} />
         <Route path="forgot-password" element={<ForgotPassword />} />
         <Route path="alert" element={<AlertPage />} />
-        <Route path="demo" element={<Dropdown />} />
+        <Route path="demo" element={<AuroraBackgroundDemo />} />
 
         <Route element={<ProtectedRoute />}>
           <Route element={<AdminRoutes />}>
