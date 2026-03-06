@@ -3,8 +3,10 @@ import { Button } from "@/components/ui/button";
 import { useAdmin } from "@/hooks/useAdmin";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Search } from "lucide-react";
+import { Search, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router";
+
 export default function AdminCategories() {
   const {
     loading,
@@ -22,6 +24,7 @@ export default function AdminCategories() {
   const [editingId, setEditingId] = useState(null);
   const [editName, setEditName] = useState("");
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
     allCategories();
   }, []);
@@ -55,8 +58,7 @@ export default function AdminCategories() {
       setNewCategory("");
       setIsOpen(false);
     } catch (err) {
-      console.log();
-      toast.error(err.message || "Something Went Wrong");
+      toast.error(err || "Something Went Wrong");
       setNewCategory("");
     }
   };
@@ -77,13 +79,22 @@ export default function AdminCategories() {
       <div className="w-full max-w-6xl mx-auto bg-card shadow-lg rounded-2xl p-6 space-y-6 border border-border">
         {" "}
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-primary">
-              Category Management
-            </h1>
-            <p className="text-muted-foreground text-sm mt-4">
-              Add and manage product categories
-            </p>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigate(-1)}
+              className="flex items-center gap-1 text-primary hover:text-primary/80 font-medium"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+
+            <div>
+              <h1 className="text-3xl font-bold text-primary">
+                Category Management
+              </h1>
+              <p className="text-muted-foreground text-sm mt-1">
+                Add and manage product categories
+              </p>
+            </div>
           </div>
 
           <div className="flex items-center gap-3">

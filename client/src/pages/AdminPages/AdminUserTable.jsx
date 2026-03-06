@@ -1,12 +1,13 @@
 import { DataTable } from "@/components/blocks/data-table";
 import { RowActions } from "@/components/blocks/row-actions";
 import { useAdmin } from "@/hooks/useAdmin";
-import { Trash, Trash2 } from "lucide-react";
+import { ArrowLeft, Trash, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
 
 export default function AdminUserTable() {
+  const navigate=useNavigate();
   const { usersByRole, loading, deleteuser } = useAdmin();
   const { type } = useParams();
   const [users, setUsers] = useState([]);
@@ -66,10 +67,18 @@ export default function AdminUserTable() {
     <div className="min-h-screen p-6">
       <div className="bg-background rounded-2xl shadow-lg border border-border p-6 space-y-6">
         <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-primary">All {heading}</h1>
-            {/* <p className="text-ring text-sm"></p> */}
-          </div>
+         <div className="flex items-center gap-3 mb-4">
+  {/* Back icon button */}
+  <button
+    onClick={() => navigate(-1)}
+    className="text-primary hover:text-primary/80 p-1 rounded"
+  >
+    <ArrowLeft className="h-5 w-5" />
+  </button>
+
+  {/* Heading */}
+  <h1 className="text-3xl font-bold text-primary">All {heading}</h1>
+</div>
         </div>
 
         <div className="rounded-xl border border-border overflow-hidden">

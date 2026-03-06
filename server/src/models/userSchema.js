@@ -44,6 +44,7 @@ const userSchema = new mongoose.Schema(
         return this.role === "seller";
       },
       unique: true,
+      sparse:true,
     },
     vehicleNum: {
       type: String,

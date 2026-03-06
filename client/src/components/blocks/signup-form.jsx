@@ -144,7 +144,7 @@ export function SignupForm({ className, ...props }) {
             control={control}
             render={({ field }) => (
               <div className="grid grid-cols-3 gap-3 mt-2">
-                {["User", "seller", "transporter"].map((roleOption) => (
+                {["user", "seller", "transporter"].map((roleOption) => (
                   <button
                     type="button"
                     key={roleOption}

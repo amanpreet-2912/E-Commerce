@@ -69,7 +69,6 @@ export default function CreateProductPage() {
     }
   }
   function handleImageChange(e) {
-    console.log(e.target.files);
     const files = Array.from(e.target.files);
     setValue("images", files);
 
@@ -82,133 +81,102 @@ export default function CreateProductPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <div className="flex items-center gap-3 mb-6">
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={() => navigate("/seller/dashboard")
-          }
-          className={"hover:text-background"}
-        >
-          <MoveLeft className="w-5 h-5" />
-        </Button>
+    <div className="max-w-3xl w-full mx-auto p-6 sm:p-8 bg-white rounded-xl shadow-lg transition-all duration-300">
+  <div className="flex items-center gap-3 mb-6">
+    <Button
+      type="button"
+      variant="ghost"
+      size="icon"
+      onClick={() => navigate("/seller/dashboard")}
+      className="hover:bg-gray-100 transition"
+    >
+      <MoveLeft className="w-5 h-5" />
+    </Button>
+    <h1 className="text-2xl sm:text-3xl font-semibold">Create New Product</h1>
+  </div>
 
-        <h1 className="text-2xl font-semibold">Create New Product</h1>
-      </div>
+  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    {/* Product Images */}
+    <Field>
+      <FieldLabel>Product Images</FieldLabel>
+      <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-lg p-6 cursor-pointer hover:bg-gray-50 transition">
+        <UploadCloud className="w-8 h-8 text-gray-400" />
+        <p className="text-sm text-gray-500">
+          Click or drag to upload product images
+        </p>
+        <Input type="file" multiple className="hidden" onChange={handleImageChange} />
+      </label>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-        <Field>
-          <FieldLabel>Product Images</FieldLabel>
-
-          <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-lg p-6 cursor-pointer hover:bg-muted transition">
-            <UploadCloud className="w-8 h-8 text-muted-foreground" />
-            <p className="text-sm text-muted-foreground">
-              Click to upload product images
-            </p>
-            <Input
-              type="file"
-              multiple
-              className="hidden"
-              onChange={handleImageChange}
-            />
-          </label>
-
-          {previewImages.length > 0 && (
-            <div className="grid grid-cols-3 gap-3 mt-4">
-              {previewImages.map((img, idx) => (
-                <div
-                  key={idx}
-                  className="relative group rounded-lg overflow-hidden border"
-                >
-                  <img
-                    src={img.url}
-                    alt="preview"
-                    className="h-28 w-full object-cover"
-                  />
-                </div>
-              ))}
+      {previewImages.length > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4">
+          {previewImages.map((img, idx) => (
+            <div key={idx} className="relative rounded-lg overflow-hidden border hover:shadow-md transition">
+              <img src={img.url} alt="preview" className="h-28 w-full object-cover" />
             </div>
-          )}
-        </Field>
-
-        <Field>
-          <FieldLabel>Product Name</FieldLabel>
-          <Input {...register("name")} placeholder="Enter product name" />
-          {errors.name && (
-            <p className="text-sm text-red-500">{errors.name.message}</p>
-          )}
-        </Field>
-
-        <Field>
-          <FieldLabel>Description</FieldLabel>
-          <Input
-            {...register("description")}
-            placeholder="Product description"
-          />
-        </Field>
-
-        <div className="grid grid-cols-2 gap-4">
-          <Field>
-            <FieldLabel>Price</FieldLabel>
-            <Input
-              type="number"
-              {...register("price", { valueAsNumber: true })}
-            />
-          </Field>
-
-          <Field>
-            <FieldLabel>Stock</FieldLabel>
-            <Input
-              type="number"
-              {...register("stock", { valueAsNumber: true })}
-            />
-          </Field>
+          ))}
         </div>
+      )}
+    </Field>
 
-        <div className="grid grid-cols-2 gap-4">
-          <select
-            className="border rounded-lg p-3"
-            value={selectedCategory}
-            onChange={(e) => {
-              setSelectedCategory(e.target.value);
-              setSelectedSubcategory("");
-            }}
-          >
-            <option>Select Category</option>
+    {/* Product Name & Description */}
+    <Field>
+      <FieldLabel>Product Name</FieldLabel>
+      <Input {...register("name")} placeholder="Enter product name" className="hover:border-gray-400 focus:border-blue-400" />
+      {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
+    </Field>
 
-            {categories.map((cat) => (
-              <option key={cat._id} value={cat._id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
+    <Field>
+      <FieldLabel>Description</FieldLabel>
+      <Input {...register("description")} placeholder="Product description" className="hover:border-gray-400 focus:border-blue-400" />
+    </Field>
 
-          <select
-            className="border rounded-lg p-3"
-            value={selectedSubcategory}
-            onChange={(e) => setSelectedSubcategory(e.target.value)}
-            disabled={!selectedCategory}
-          >
-            <option>Select Subcategory</option>
-
-            {subcategories.map((sub) => (
-              <option key={sub._id} value={sub._id}>
-                {sub.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <Button
-          type="submit"
-          disabled={loading || isSubmitting}
-          className="w-full text-background "
-        >
-          {loading || isSubmitting ? "Creating..." : "Create Product"}
-        </Button>
-      </form>
+    {/* Price & Stock */}
+    <div className="grid grid-cols-2 gap-4">
+      <Field>
+        <FieldLabel>Price</FieldLabel>
+        <Input type="number" {...register("price", { valueAsNumber: true })} className="hover:border-gray-400 focus:border-blue-400" />
+      </Field>
+      <Field>
+        <FieldLabel>Stock</FieldLabel>
+        <Input type="number" {...register("stock", { valueAsNumber: true })} className="hover:border-gray-400 focus:border-blue-400" />
+      </Field>
     </div>
+
+    {/* Categories */}
+    <div className="grid grid-cols-2 gap-4">
+      <select
+        className="border rounded-lg p-3 hover:border-gray-400 focus:border-blue-400 transition"
+        value={selectedCategory}
+        onChange={(e) => { setSelectedCategory(e.target.value); setSelectedSubcategory(""); }}
+      >
+        <option value="">Select Category</option>
+        {categories.map((cat) => (
+          <option key={cat._id} value={cat._id}>{cat.name}</option>
+        ))}
+      </select>
+
+      <select
+        className="border rounded-lg p-3 hover:border-gray-400 focus:border-blue-400 transition disabled:opacity-50"
+        value={selectedSubcategory}
+        onChange={(e) => setSelectedSubcategory(e.target.value)}
+        disabled={!selectedCategory}
+      >
+        <option value="">Select Subcategory</option>
+        {subcategories.map((sub) => (
+          <option key={sub._id} value={sub._id}>{sub.name}</option>
+        ))}
+      </select>
+    </div>
+
+    {/* Submit */}
+    <Button
+      type="submit"
+      disabled={loading || isSubmitting}
+      className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition"
+    >
+      {loading || isSubmitting ? "Creating..." : "Create Product"}
+    </Button>
+  </form>
+</div>
   );
 }
