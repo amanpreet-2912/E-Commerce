@@ -1,5 +1,6 @@
 import { useAdmin } from "@/hooks/useAdmin";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 import {
   Dialog,
@@ -10,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { Button } from "@/components/ui/button";
+import { ArrowLeft, Filter } from "lucide-react"; 
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
@@ -17,8 +19,10 @@ export default function AdminOrders() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedTransporter, setSelectedTransporter] = useState("");
   const [open, setOpen] = useState(false);
+  const [statusFilter, setStatusFilter] = useState("All"); 
 
   const { fetchOrders, fetchTransporters, assign } = useAdmin();
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadData();
@@ -32,20 +36,19 @@ export default function AdminOrders() {
   };
 
   const handleAssign = async () => {
-    console.log(selectedOrder);
-    console.log(selectedTransporter);
     const data = {
       orderId: selectedOrder._id,
       transporterId: selectedTransporter,
     };
+
     await assign(data);
 
     setOrders((prev) =>
       prev.map((order) =>
         order._id === selectedOrder._id
           ? { ...order, transporter: selectedTransporter, status: "Assigned" }
-          : order,
-      ),
+          : order
+      )
     );
 
     setOpen(false);
@@ -61,12 +64,51 @@ export default function AdminOrders() {
     return "bg-yellow-100 text-yellow-700";
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <h1 className="text-xl font-semibold mb-4 text-primary">All Orders</h1>
+  const filteredOrders =
+    statusFilter === "All"
+      ? orders
+      : orders.filter((order) => order.status === statusFilter);
 
-      <div className="space-y-3">
-        {orders.map((order) => {
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => navigate(-1)}
+            className="rounded-full hover:text-background"
+          >
+            <ArrowLeft size={18} />
+          </Button>
+
+          <h1 className="text-2xl font-semibold text-primary">
+            Orders Management
+          </h1>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Filter size={16} className="text-gray-500" />
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-2 py-1 text-sm border rounded-lg outline-none focus:ring-1 focus:ring-primary"
+          >
+            <option value="All">All</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+            <option value="Out for Delivery">Out for Delivery</option>
+            <option value="Assigned">Assigned</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        {filteredOrders.length === 0 && (
+          <p className="text-gray-500 text-sm">No orders found</p>
+        )}
+
+        {filteredOrders.map((order) => {
           let total = 0;
           order.orderItems.forEach((item) => {
             total += item.price * item.quantity;
@@ -75,26 +117,25 @@ export default function AdminOrders() {
           return (
             <div
               key={order._id}
-              className="bg-background border rounded-lg text-sm"
+              className="bg-white border rounded-xl shadow-sm hover:shadow-md transition"
             >
-              <div className="flex justify-between items-center px-3 py-2 border-b">
-                <div className="flex gap-3 items-center flex-wrap">
-                  <span className="font-medium">#{order._id.slice(-6)}</span>
-
-                  <span className="text-gray-500">{order.user?.name}</span>
+              <div className="flex justify-between items-center px-4 py-3 border-b">
+                <div className="flex flex-col">
+                  <span className="font-semibold text-sm">
+                    Order #{order._id.slice(-6)}
+                  </span>
+                  <span className="text-xs text-gray-500">{order.user?.name}</span>
                 </div>
 
-                <div className="flex items-center gap-2 flex-wrap justify-end">
-                  <span className="font-medium">₹{total}</span>
-
+                <div className="flex items-center gap-3 flex-wrap justify-end">
+                  <span className="font-semibold text-sm">₹{total}</span>
                   <span
-                    className={`text-xs px-2 py-0.5 rounded ${getStatusColor(
-                      order.status,
+                    className={`text-xs px-3 py-1 rounded-full font-medium ${getStatusColor(
+                      order.status
                     )}`}
                   >
                     {order.status}
                   </span>
-
                   <Button
                     size="sm"
                     disabled={!!order.transporter}
@@ -102,26 +143,25 @@ export default function AdminOrders() {
                       setSelectedOrder(order);
                       setOpen(true);
                     }}
-                    className="text-background h-7 px-2 text-xs"
+                    className="text-background text-xs h-8"
                   >
                     {order.transporter ? "Assigned" : "Assign"}
                   </Button>
                 </div>
               </div>
 
-              <div className="px-3 py-2 space-y-1">
+              <div className="px-4 py-3 space-y-2">
                 {order.orderItems.map((item) => (
-                  <div key={item._id} className="flex justify-between text-xs">
-                    <span>
+                  <div key={item._id} className="flex justify-between text-sm">
+                    <span className="text-gray-700">
                       {item.product?.name} × {item.quantity}
                     </span>
-
-                    <span>₹{item.price * item.quantity}</span>
+                    <span className="font-medium">₹{item.price * item.quantity}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="px-3 pb-2 text-xs text-gray-400">
+              <div className="px-4 pb-3 text-xs text-gray-400">
                 {new Date(order.createdAt).toLocaleDateString()}
               </div>
             </div>
@@ -132,23 +172,22 @@ export default function AdminOrders() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Assign Transporter</DialogTitle>
+            <DialogTitle>Select Transporter</DialogTitle>
           </DialogHeader>
 
-          <div className="space-y-2 max-h-60 overflow-y-auto">
+          <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
             {transporters.map((t) => (
               <div
                 key={t._id}
                 onClick={() => setSelectedTransporter(t._id)}
-                className={`border rounded-md p-3 cursor-pointer transition
-                  ${
-                    selectedTransporter === t._id
-                      ? "border-primary bg-primary/10"
-                      : "hover:bg-muted"
-                  }`}
+                className={`border rounded-lg p-3 cursor-pointer transition
+                ${
+                  selectedTransporter === t._id
+                    ? "border-primary bg-primary/10"
+                    : "hover:bg-muted"
+                }`}
               >
                 <p className="font-medium text-sm">{t.name}</p>
-
                 <p className="text-xs text-muted-foreground">{t.email}</p>
               </div>
             ))}

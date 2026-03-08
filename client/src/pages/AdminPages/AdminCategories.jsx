@@ -79,24 +79,25 @@ export default function AdminCategories() {
       <div className="w-full max-w-6xl mx-auto bg-card shadow-lg rounded-2xl p-6 space-y-6 border border-border">
         {" "}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <button
+          <div className="flex items-center gap-3 mb-6">
+            <Button
+              variant="outline"
+              size="icon"
               onClick={() => navigate(-1)}
-              className="flex items-center gap-1 text-primary hover:text-primary/80 font-medium"
+              className="rounded-full hover:text-background"
             >
-              <ArrowLeft className="h-5 w-5" />
-            </button>
-
+              <ArrowLeft size={18} />
+            </Button>
             <div>
-              <h1 className="text-3xl font-bold text-primary">
+              <h1 className="text-2xl font-semibold text-primary">
                 Category Management
               </h1>
               <p className="text-muted-foreground text-sm mt-1">
                 Add and manage product categories
               </p>
             </div>
+            
           </div>
-
           <div className="flex items-center gap-3">
             <div className="relative w-64">
               <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />

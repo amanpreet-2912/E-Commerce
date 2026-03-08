@@ -5,6 +5,7 @@ import CartItems from "@/components/blocks/CartItems";
 import Address from "@/components/blocks/AddressSection";
 import OrderSummary from "@/components/blocks/OrderSummary";
 import { useNavigate } from "react-router";
+import { ArrowLeft } from "lucide-react";
 
 export default function UserCart() {
   const {
@@ -20,21 +21,30 @@ export default function UserCart() {
 
   const [selectedAddress, setSelectedAddress] = useState(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     fetchCart();
     fetchAddresses();
   }, []);
 
   if (!cart || cart.cartItems.length === 0) {
-    return <p className="text-center py-20">Your cart is empty</p>;
+    return (
+      <p className="text-center text-lg py-20 text-muted-foreground">
+        Your cart is empty
+      </p>
+    );
   }
-  let totalAmount=0;
+
+  let totalAmount = 0;
   cart.cartItems.forEach(
-    (item) => (totalAmount += item.product.price * item.quantity),
+    (item) => (totalAmount += item.product.price * item.quantity)
   );
 
   const handleCheckout = async () => {
-   
+    if (!selectedAddress) {
+      toast.error("Please select an address");
+      return;
+    }
 
     try {
       await placeOrder(selectedAddress);
@@ -44,28 +54,43 @@ export default function UserCart() {
       toast.error("Something Went Wrong");
     }
   };
+
   const handleRemove = async (productId) => {
     await remove(productId);
-    toast.success("Item removed from cart")
+    toast.success("Item removed from cart");
   };
+
   return (
-    <div className="px-4 lg:px-8 py-10">
-      <div className="grid lg:grid-cols-2 gap-10">
-        <CartItems cart={cart} updateCart={updateCart} handleRemove={handleRemove} />
+   <div className="w-full px-6 lg:px-12 py-10">
 
-        <div className="lg:w-125 space-y-6">
-          <Address
-            Section
-            addresses={addresses}
-            selectedAddress={selectedAddress}
-            setSelectedAddress={setSelectedAddress}
-            createAddress={createAddress}
-            fetchAddresses={fetchAddresses}
-          />
+  
 
-          <OrderSummary totalAmount={totalAmount} onCheckout={handleCheckout} />
-        </div>
-      </div>
+  <div className="grid lg:grid-cols-3 gap-10">
+
+    <div className="lg:col-span-2">
+      <CartItems
+        cart={cart}
+        updateCart={updateCart}
+        handleRemove={handleRemove}
+      />
     </div>
+
+    <div className="space-y-6 sticky top-10 h-fit">
+      <Address
+        addresses={addresses}
+        selectedAddress={selectedAddress}
+        setSelectedAddress={setSelectedAddress}
+        createAddress={createAddress}
+        fetchAddresses={fetchAddresses}
+      />
+
+      <OrderSummary
+        totalAmount={totalAmount}
+        onCheckout={handleCheckout}
+      />
+    </div>
+
+  </div>
+</div>
   );
 }

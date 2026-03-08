@@ -25,7 +25,6 @@ export default function AdminDashboard() {
       description: "Includes sellers & transporters",
       icon: Users,
       link: "/admin/users/user",
-      manage:true
     },
     {
       title: "Total Products",
@@ -34,7 +33,7 @@ export default function AdminDashboard() {
       description: "Products listed by sellers",
       icon: Package,
       link: "/admin/products",
-            manage:true
+         
 
     },
     {
@@ -44,7 +43,6 @@ export default function AdminDashboard() {
       description: "Last 30 days",
       icon: ShoppingCart,
       link: "/admin/orders",
-            manage:true
 
     },
     {
@@ -54,7 +52,6 @@ export default function AdminDashboard() {
       description: "Sellers & transporters",
       icon: Clock,
       link: "/admin/requests",
-            manage:true
 
     },
   ];

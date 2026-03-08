@@ -17,7 +17,6 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 
 export default function TransporterPage() {
   const [orders, setOrders] = useState([]);
-
   const [openId, setOpenId] = useState(null);
 
   const { fetchOrders, updateStatus } = useTransporter();
@@ -39,8 +38,8 @@ export default function TransporterPage() {
 
     setOrders((prev) =>
       prev.map((order) =>
-        order._id === id ? { ...order, status: value } : order,
-      ),
+        order._id === id ? { ...order, status: value } : order
+      )
     );
   };
 
@@ -62,10 +61,14 @@ export default function TransporterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <h1 className="text-lg font-semibold mb-4"> Assigned Orders</h1>
+    <div className="w-full px-6 lg:px-12 py-8 bg-gray-50 min-h-screen">
 
-      <div className="space-y-4 max-w-lg">
+      <h1 className="text-2xl font-bold mb-6">
+        Assigned Orders
+      </h1>
+
+      <div className="space-y-6 max-w-3xl">
+
         {orders.map((order) => {
           let total = 0;
 
@@ -76,45 +79,42 @@ export default function TransporterPage() {
           return (
             <Card
               key={order._id}
-              className="
-              border
-              rounded-xl
-              shadow-sm
-              hover:shadow-md
-              transition
-              "
+              className="rounded-xl shadow-sm hover:shadow-md transition"
             >
-              <CardHeader className="flex flex-row justify-between items-center py-3 px-4">
-                <div>
-                  <p className="font-semibold text-sm">
+              <CardHeader className="flex flex-row justify-between items-center">
+
+                <div className="flex flex-col">
+                  <p className="font-semibold">
                     Order #{order._id.slice(-6)}
                   </p>
 
-                  <p className="text-xs text-muted-foreground">
-                    {order.user?.name}
+                  <p className="text-sm text-muted-foreground">
+                    Customer: {order.user?.name}
                   </p>
                 </div>
 
                 <Badge
-                  className={`
-                  text-[10px]
-                  px-2 py-1
-                  border
-                  ${getStatusColor(order.status)}
-                  `}
+                  className={`text-xs px-3 py-1 border ${getStatusColor(
+                    order.status
+                  )}`}
                 >
                   {order.status}
                 </Badge>
+
               </CardHeader>
 
-              <CardContent className="px-4 pb-4 pt-0 space-y-3">
-                <div>
-                  <p className="text-xs font-medium mb-1">Products</p>
+              <CardContent className="space-y-4">
+
+                <div className="space-y-2">
+
+                  <p className="text-sm font-medium">
+                    Products
+                  </p>
 
                   {order.orderItems.map((item) => (
                     <div
                       key={item._id}
-                      className="flex justify-between text-xs"
+                      className="flex justify-between items-center text-sm bg-muted/40 rounded-md px-3 py-2"
                     >
                       <span>
                         {item.product?.name} × {item.quantity}
@@ -126,46 +126,33 @@ export default function TransporterPage() {
                     </div>
                   ))}
 
-                  <div className="flex justify-between font-semibold border-t pt-2 mt-2 text-primary">
+                  <div className="flex justify-between font-semibold border-t pt-3 text-primary">
                     <span>Total</span>
-
                     <span>₹{total}</span>
                   </div>
+
                 </div>
 
                 <div>
+
                   <div
                     onClick={() => toggleAddress(order._id)}
-                    className="
-                    flex justify-between items-center
-                    cursor-pointer
-                    text-xs
-                    font-medium
-                    select-none
-                    "
+                    className="flex justify-between items-center cursor-pointer text-sm font-medium"
                   >
                     <span>Delivery Address</span>
 
                     {openId === order._id ? (
-                      <ChevronUp size={16} />
+                      <ChevronUp size={18} />
                     ) : (
-                      <ChevronDown size={16} />
+                      <ChevronDown size={18} />
                     )}
                   </div>
 
                   {openId === order._id && (
-                    <div
-                      className="
-                      bg-muted/50
-                      p-3
-                      rounded-lg
-                      text-xs
-                      mt-2
-                      space-y-1
-                      animate-in fade-in
-                      "
-                    >
-                      <p>{order.address?.fullname}</p>
+                    <div className="bg-muted/40 p-3 rounded-lg text-sm mt-2 space-y-1">
+                      <p className="font-medium">
+                        {order.address?.fullname}
+                      </p>
 
                       <p>{order.address?.phone}</p>
 
@@ -177,30 +164,47 @@ export default function TransporterPage() {
                       </p>
                     </div>
                   )}
+
                 </div>
 
-                <Select
-                  value={order.status}
-                  onValueChange={(value) => handleChange(order._id, value)}
-                >
-                  <SelectTrigger className="h-8 text-xs">
-                    <SelectValue />
-                  </SelectTrigger>
+                <div>
 
-                  <SelectContent>
-                    <SelectItem value="Assigned">Assigned</SelectItem>
+                  <p className="text-sm font-medium mb-1">
+                    Update Status
+                  </p>
 
-                    <SelectItem value="Out for Delivery">
-                      Out for Delivery
-                    </SelectItem>
+                  <Select
+                    value={order.status}
+                    onValueChange={(value) =>
+                      handleChange(order._id, value)
+                    }
+                  >
+                    <SelectTrigger className="h-9 text-sm">
+                      <SelectValue />
+                    </SelectTrigger>
 
-                    <SelectItem value="Delivered">Delivered</SelectItem>
-                  </SelectContent>
-                </Select>
+                    <SelectContent>
+                      <SelectItem value="Assigned">
+                        Assigned
+                      </SelectItem>
+
+                      <SelectItem value="Out for Delivery">
+                        Out for Delivery
+                      </SelectItem>
+
+                      <SelectItem value="Delivered">
+                        Delivered
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                </div>
+
               </CardContent>
             </Card>
           );
         })}
+
       </div>
     </div>
   );

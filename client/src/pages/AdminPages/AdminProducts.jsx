@@ -6,7 +6,7 @@ import { RowActions } from "@/components/blocks/row-actions";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { Search , ArrowLeft } from "lucide-react";
-import { Package, Boxes, AlertCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 export default function AdminProductsPage() {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
@@ -122,13 +122,14 @@ export default function AdminProductsPage() {
 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
   <div className="flex items-center gap-3">
   
-    <button
-      onClick={() => navigate(-1)}
-      className="flex items-center gap-1 text-primary hover:text-primary/80 font-medium"
-    >
-      <ArrowLeft className="h-5 w-5" />
-     
-    </button>
+     <Button
+              variant="outline"
+              size="icon"
+              onClick={() => navigate(-1)}
+              className="rounded-full hover:text-background"
+            >
+              <ArrowLeft size={18} />
+            </Button> 
 
     <div>
       <h1 className="text-3xl font-bold tracking-tight text-primary">Products</h1>
@@ -138,7 +139,6 @@ export default function AdminProductsPage() {
     </div>
   </div>
 
-  {/* Search input */}
   <div className="relative w-full md:w-80">
     <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
 

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import { Button } from "../ui/button";
 import { DataTable } from "./data-table";
 import { RowActions } from "./row-actions";
-import { Search } from "lucide-react";
+import { Search ,ArrowLeft} from "lucide-react";
 
 export function SellerTable() {
   const navigate = useNavigate();
@@ -73,10 +73,25 @@ export function SellerTable() {
   return (
     <div className="bg-background rounded-2xl shadow-lg border-border p-6 space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-primary">My Products</h1>
-          <p className="text-ring text-sm">Manage your listed products here</p>
-        </div>
+  <div className="flex items-center gap-3">
+    {/* <button
+      onClick={() => navigate(-1)}
+      className="flex items-center text-primary hover:text-primary/80"
+    >
+      <ArrowLeft className="h-6 w-6" />
+    </button> */}
+
+    <div>
+      <h1 className="text-3xl font-bold text-primary">My Products</h1>
+      <p className="text-ring text-sm">Manage your listed products here</p>
+    </div>
+  </div>
+
+
+
+
+
+
                   <div className="flex items-center gap-3">
 
         <div className="relative w-64">
