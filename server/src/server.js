@@ -5,8 +5,9 @@ import cors from "cors";
 import { connectDB } from "./config/db.js";
 import routes from "./routes/index.js";
 import cookieParser from "cookie-parser";
-import path from "path"
+import path from "path";
 const app = express();
+console.log(process.env.PORT);
 connectDB();
 app.use(cookieParser());
 app.use(
