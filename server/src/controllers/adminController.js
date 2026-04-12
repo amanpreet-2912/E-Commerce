@@ -68,15 +68,22 @@ export async function rejectRequest(req, res) {
 }
 export async function getAllProducts(req, res) {
   try {
-    const { seller, category, subcategory } = req.query;
+    const { seller, category, subcategory, search,page = 1, limit = 10 } = req.query;
+    if(search){
+      
+    }
     const filter = {};
     if (seller) filter.seller = seller;
     if (category) filter.category = category;
     if (subcategory) filter.subcategory = subcategory;
+    const skip = (page - 1) * limit;
+    const total = await Product.countDocuments(filter);
     const products = await Product.find(filter)
       .populate("seller", "name role email createdAt")
       .populate("categoryId")
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(Number(limit));
     const newObj = products.map((product) => {
       const subcategory = product.categoryId.subcategories.id(
         product.subcategoryId,
@@ -84,13 +91,16 @@ export async function getAllProducts(req, res) {
       return {
         ...product.toObject(),
         category: product.categoryId.name,
-        subcategory: subcategory.name,
+        subcategory: subcategory?.name,
       };
     });
 
     res.json({
-      count: products.length,
-      newObj,
+      
+      products:newObj,
+      total,
+      page:Number(page),
+      pages:Math.ceil(total/limit)
     });
   } catch (err) {
     console.log(err);
